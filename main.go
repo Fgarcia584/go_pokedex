@@ -92,6 +92,5 @@ func main() {
 	http.HandleFunc("/", homeHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	log.Printf("🚀 Serveur démarré sur http://localhost:%s", port)
-	log.Fatal(http.ListenAndServe(port, nil))
+	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
