@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	tyradexAPI = "https://tyradex.tech/api/v1/pokemon"
+	tyradexAPI = "https://tyradex.vercel.app/api/v1/pokemon"
 )
 
 // Pokemon représente un pokémon de l'API Tyradex
