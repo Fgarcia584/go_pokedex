@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>🔴 Pokédex</h1>
+        <p>Explorez tous les Pokémon avec Tyradex</p>
+    </header>
+
+    <main>
+        <div class="pokemon-grid">
+            {{ range .Pokemons }}
+            <div class="pokemon-card">
+                <div class="pokemon-id">#{{ printf "%03d" .PokedexID }}</div>
+                <div class="pokemon-sprite">
+                    <img src="{{ .Sprites.Regular }}" alt="{{ .Name.Fr }}" loading="lazy">
+                </div>
+                <h2 class="pokemon-name">{{ .Name.Fr }}</h2>
+                <div class="pokemon-types">
+                    {{ range .Types }}
+                    <span class="type-badge">
+                        <img src="{{ .Image }}" alt="{{ .Name }}" title="{{ .Name }}">
+                    </span>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </main>
+
+    <footer>
+        <p>Données fournies par <a href="https://tyradex.tech" target="_blank">Tyradex API</a></p>
+    </footer>
+</body>
+</html>
