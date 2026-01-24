@@ -1,3 +1,3 @@
-module go-pokedex
+module go_pokedex
 
 go 1.25.6
