@@ -1,1 +1,1 @@
-web: ./go-pokedex
+web: ./go_pokedex
