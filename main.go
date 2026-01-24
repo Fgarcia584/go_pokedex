@@ -11,7 +11,6 @@ import (
 
 const (
 	tyradexAPI = "https://tyradex.tech/api/v1/pokemon"
-	port       = ":8080"
 )
 
 // Pokemon représente un pokémon de l'API Tyradex
@@ -93,6 +92,6 @@ func main() {
 	http.HandleFunc("/", homeHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	log.Printf("🚀 Serveur démarré sur http://localhost%s", port)
+	log.Printf("🚀 Serveur démarré sur http://localhost:%s", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
