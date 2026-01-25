@@ -7,34 +7,129 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <header>
-        <h1>🔴 Pokédex</h1>
-        <p>Explorez tous les Pokémon avec Tyradex</p>
-    </header>
-
-    <main>
-        <div class="pokemon-grid">
-            {{ range .Pokemons }}
-            <div class="pokemon-card">
-                <div class="pokemon-id">#{{ printf "%03d" .PokedexID }}</div>
-                <div class="pokemon-sprite">
-                    <img src="{{ .Sprites.Regular }}" alt="{{ .Name.Fr }}" loading="lazy">
+    <div class="pokedex-container">
+        <!-- Panneau gauche : Affichage du Pokémon sélectionné -->
+        <div class="display-panel">
+            <div class="display-screen">
+                <div class="screen-number" id="displayNumber">N° 001</div>
+                <div class="screen-sprite">
+                    <img id="displaySprite" src="{{ (index .Pokemons 0).Sprites.Regular }}" alt="Sprite">
                 </div>
-                <h2 class="pokemon-name">{{ .Name.Fr }}</h2>
-                <div class="pokemon-types">
-                    {{ range .Types }}
-                    <span class="type-badge">
-                        <img src="{{ .Image }}" alt="{{ .Name }}" title="{{ .Name }}">
-                    </span>
+                <div class="screen-name" id="displayName">{{ (index .Pokemons 0).Name.Fr }}</div>
+                <div class="screen-types" id="displayTypes">
+                    {{ range (index .Pokemons 0).Types }}
+                    <img src="{{ .Image }}" alt="{{ .Name }}" title="{{ .Name }}">
                     {{ end }}
                 </div>
             </div>
-            {{ end }}
         </div>
-    </main>
 
-    <footer>
-        <p>Données fournies par <a href="https://tyradex.tech" target="_blank">Tyradex API</a></p>
-    </footer>
+        <!-- Panneau droit : Header + Liste -->
+        <div class="list-panel">
+            <!-- Header avec compteurs -->
+            <div class="pokedex-header">
+                <div class="header-title">POKÉDEX D'UNYS</div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">POKÉMON VUS</span>
+                        <span class="stat-value">{{ len .Pokemons }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">POKÉMON PRIS</span>
+                        <span class="stat-value">{{ len .Pokemons }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des Pokémon avec fond vert quadrillé -->
+            <div class="pokemon-list-container">
+                <div class="pokemon-list" id="pokemonList">
+                    {{ range .Pokemons }}
+                    <div class="pokemon-row" 
+                         data-id="{{ .PokedexID }}"
+                         data-name="{{ .Name.Fr }}"
+                         data-sprite="{{ .Sprites.Regular }}"
+                         data-types='{{ range .Types }}{{ .Image }}|{{ .Name }},{{ end }}'>
+                        <div class="row-sprite">
+                            <div class="sprite-circle">
+                                <img src="{{ .Sprites.Regular }}" alt="{{ .Name.Fr }}">
+                            </div>
+                        </div>
+                        <div class="row-info">
+                            <span class="row-number">N° {{ printf "%03d" .PokedexID }}</span>
+                            <span class="row-name">{{ .Name.Fr }}</span>
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const rows = document.querySelectorAll('.pokemon-row');
+        const displaySprite = document.getElementById('displaySprite');
+        const displayName = document.getElementById('displayName');
+        const displayNumber = document.getElementById('displayNumber');
+        const displayTypes = document.getElementById('displayTypes');
+        let selectedIndex = 0;
+
+        function selectRow(index) {
+            rows.forEach(row => row.classList.remove('selected'));
+            if (rows[index]) {
+                const row = rows[index];
+                row.classList.add('selected');
+                row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                selectedIndex = index;
+
+                // Mettre à jour l'affichage
+                const id = row.dataset.id;
+                const name = row.dataset.name;
+                const sprite = row.dataset.sprite;
+                const typesData = row.dataset.types;
+
+                displayNumber.textContent = `N° ${id.padStart(3, '0')}`;
+                displayName.textContent = name;
+                displaySprite.src = sprite;
+                displaySprite.alt = name;
+
+                // Mettre à jour les types
+                displayTypes.innerHTML = '';
+                if (typesData) {
+                    const types = typesData.split(',').filter(t => t);
+                    types.forEach(typeStr => {
+                        const [image, typeName] = typeStr.split('|');
+                        if (image && typeName) {
+                            const img = document.createElement('img');
+                            img.src = image;
+                            img.alt = typeName;
+                            img.title = typeName;
+                            displayTypes.appendChild(img);
+                        }
+                    });
+                }
+            }
+        }
+
+        rows.forEach((row, index) => {
+            row.addEventListener('click', () => selectRow(index));
+        });
+
+        // Navigation au clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectRow(Math.min(selectedIndex + 1, rows.length - 1));
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectRow(Math.max(selectedIndex - 1, 0));
+            }
+        });
+
+        // Sélectionner le premier par défaut
+        if (rows.length > 0) {
+            selectRow(0);
+        }
+    </script>
 </body>
 </html>
