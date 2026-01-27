@@ -12,15 +12,18 @@
         <div class="display-panel">
             <div class="display-screen">
                 <div class="screen-number" id="displayNumber">N° 001</div>
-                <div class="screen-sprite">
-                    <img id="displaySprite" src="{{ (index .Pokemons 0).Sprites.Regular }}" alt="Sprite">
-                </div>
+                <a href="/pokemon/1" id="detailLink" class="screen-sprite-link">
+                    <div class="screen-sprite">
+                        <img id="displaySprite" src="{{ (index .Pokemons 0).Sprites.Regular }}" alt="Sprite">
+                    </div>
+                </a>
                 <div class="screen-name" id="displayName">{{ (index .Pokemons 0).Name.Fr }}</div>
                 <div class="screen-types" id="displayTypes">
                     {{ range (index .Pokemons 0).Types }}
                     <img src="{{ .Image }}" alt="{{ .Name }}" title="{{ .Name }}">
                     {{ end }}
                 </div>
+                <div class="click-hint">Cliquer pour voir les détails</div>
             </div>
         </div>
 
@@ -72,6 +75,7 @@
         const displayName = document.getElementById('displayName');
         const displayNumber = document.getElementById('displayNumber');
         const displayTypes = document.getElementById('displayTypes');
+        const detailLink = document.getElementById('detailLink');
         let selectedIndex = 0;
 
         function selectRow(index) {
@@ -92,6 +96,9 @@
                 displayName.textContent = name;
                 displaySprite.src = sprite;
                 displaySprite.alt = name;
+                
+                // Mettre à jour le lien
+                detailLink.href = `/pokemon/${id}`;
 
                 // Mettre à jour les types
                 displayTypes.innerHTML = '';
@@ -123,6 +130,9 @@
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 selectRow(Math.max(selectedIndex - 1, 0));
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                window.location.href = detailLink.href;
             }
         });
 

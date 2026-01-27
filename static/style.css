@@ -89,11 +89,47 @@ body {
         inset 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
+.screen-sprite-link {
+    display: block;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.screen-sprite-link:hover .screen-sprite {
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 0 30px rgba(255, 255, 255, 0.3),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+.screen-sprite-link:active .screen-sprite {
+    transform: scale(0.98);
+}
+
 .screen-sprite img {
     max-width: 90%;
     max-height: 90%;
     image-rendering: pixelated;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.click-hint {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 0.5rem;
+    font-style: italic;
+    text-align: center;
+    animation: pulse-hint 2s infinite;
+}
+
+@keyframes pulse-hint {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 .screen-name {

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/detail.css">
+</head>
+<body>
+    <div class="detail-container">
+        <!-- Header avec retour -->
+        <div class="detail-header">
+            <a href="/" class="back-button">← Retour au Pokédex</a>
+            <h1>{{ .Pokemon.Name.Fr }}</h1>
+            <div class="pokemon-number">N° {{ printf "%03d" .Pokemon.PokedexID }}</div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="detail-content">
+            <!-- Section principale avec sprite -->
+            <div class="main-section">
+                <div class="sprite-section">
+                    <div class="sprite-large">
+                        <img src="{{ .Pokemon.Sprites.Regular }}" alt="{{ .Pokemon.Name.Fr }}">
+                    </div>
+                    {{ if .Pokemon.Sprites.Shiny }}
+                    <div class="sprite-shiny">
+                        <span class="shiny-label">✨ Shiny</span>
+                        <img src="{{ .Pokemon.Sprites.Shiny }}" alt="{{ .Pokemon.Name.Fr }} Shiny">
+                    </div>
+                    {{ end }}
+                </div>
+
+                <div class="info-section">
+                    <div class="info-card">
+                        <h2>Informations générales</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Catégorie</span>
+                                <span class="info-value">{{ .Pokemon.Category }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Génération</span>
+                                <span class="info-value">{{ .Pokemon.Generation }}</span>
+                            </div>
+                            {{ if .Pokemon.Height }}
+                            <div class="info-item">
+                                <span class="info-label">Taille</span>
+                                <span class="info-value">{{ .Pokemon.Height }}</span>
+                            </div>
+                            {{ end }}
+                            {{ if .Pokemon.Weight }}
+                            <div class="info-item">
+                                <span class="info-label">Poids</span>
+                                <span class="info-value">{{ .Pokemon.Weight }}</span>
+                            </div>
+                            {{ end }}
+                            {{ if .Pokemon.CatchRate }}
+                            <div class="info-item">
+                                <span class="info-label">Taux de capture</span>
+                                <span class="info-value">{{ .Pokemon.CatchRate }}</span>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+
+                    <div class="types-card">
+                        <h3>Types</h3>
+                        <div class="types-list">
+                            {{ range .Pokemon.Types }}
+                            <div class="type-item">
+                                <img src="{{ .Image }}" alt="{{ .Name }}">
+                                <span>{{ .Name }}</span>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+
+                    {{ if .Pokemon.Talents }}
+                    <div class="talents-card">
+                        <h3>Talents</h3>
+                        <ul class="talents-list">
+                            {{ range .Pokemon.Talents }}
+                            <li>{{ .Name }}{{ if .TC }} <span class="talent-tc">(Talent Caché)</span>{{ end }}</li>
+                            {{ end }}
+                        </ul>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="stats-section">
+                <h2>Statistiques de base</h2>
+                <div class="stats-grid">
+                    <div class="stat-bar">
+                        <span class="stat-name">PV</span>
+                        <div class="stat-value-bar">
+                            <div class="stat-fill" style="width: {{ divideBy .Pokemon.Stats.HP 255.0 }}%"></div>
+                            <span class="stat-number">{{ .Pokemon.Stats.HP }}</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <span class="stat-name">Attaque</span>
+                        <div class="stat-value-bar">
+                            <div class="stat-fill" style="width: {{ divideBy .Pokemon.Stats.Attack 255.0 }}%"></div>
+                            <span class="stat-number">{{ .Pokemon.Stats.Attack }}</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <span class="stat-name">Défense</span>
+                        <div class="stat-value-bar">
+                            <div class="stat-fill" style="width: {{ divideBy .Pokemon.Stats.Def 255.0 }}%"></div>
+                            <span class="stat-number">{{ .Pokemon.Stats.Def }}</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <span class="stat-name">Atq. Spé.</span>
+                        <div class="stat-value-bar">
+                            <div class="stat-fill" style="width: {{ divideBy .Pokemon.Stats.SpAtk 255.0 }}%"></div>
+                            <span class="stat-number">{{ .Pokemon.Stats.SpAtk }}</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <span class="stat-name">Déf. Spé.</span>
+                        <div class="stat-value-bar">
+                            <div class="stat-fill" style="width: {{ divideBy .Pokemon.Stats.SpDef 255.0 }}%"></div>
+                            <span class="stat-number">{{ .Pokemon.Stats.SpDef }}</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <span class="stat-name">Vitesse</span>
+                        <div class="stat-value-bar">
+                            <div class="stat-fill" style="width: {{ divideBy .Pokemon.Stats.Speed 255.0 }}%"></div>
+                            <span class="stat-number">{{ .Pokemon.Stats.Speed }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="total-stats">
+                    <strong>Total:</strong> {{ add .Pokemon.Stats.HP .Pokemon.Stats.Attack .Pokemon.Stats.Def .Pokemon.Stats.SpAtk .Pokemon.Stats.SpDef .Pokemon.Stats.Speed }}
+                </div>
+            </div>
+
+            <!-- Résistances -->
+            {{ if .Pokemon.Resistances }}
+            <div class="resistances-section">
+                <h2>Résistances et Faiblesses</h2>
+                <div class="resistances-grid">
+                    {{ range .Pokemon.Resistances }}
+                    <div class="resistance-item {{ if lt .Multiplier 1.0 }}resistant{{ else if gt .Multiplier 1.0 }}weak{{ else }}neutral{{ end }}">
+                        <span class="resistance-name">{{ .Name }}</span>
+                        <span class="resistance-multiplier">×{{ .Multiplier }}</span>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}
+
+            <!-- Évolutions -->
+            {{ if .Pokemon.Evolution }}
+            <div class="evolution-section">
+                <h2>Évolutions</h2>
+                {{ if .Pokemon.Evolution.Pre }}
+                <div class="evolution-group">
+                    <h3>Pré-évolutions</h3>
+                    <div class="evolution-list">
+                        {{ range .Pokemon.Evolution.Pre }}
+                        <a href="/pokemon/{{ .PokedexID }}" class="evolution-card">
+                            <span class="evo-number">N° {{ printf "%03d" .PokedexID }}</span>
+                            <span class="evo-name">{{ .Name }}</span>
+                            {{ if .Condition }}
+                            <span class="evo-condition">{{ .Condition }}</span>
+                            {{ end }}
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+                {{ if .Pokemon.Evolution.Next }}
+                <div class="evolution-group">
+                    <h3>Évolutions</h3>
+                    <div class="evolution-list">
+                        {{ range .Pokemon.Evolution.Next }}
+                        <a href="/pokemon/{{ .PokedexID }}" class="evolution-card">
+                            <span class="evo-number">N° {{ printf "%03d" .PokedexID }}</span>
+                            <span class="evo-name">{{ .Name }}</span>
+                            {{ if .Condition }}
+                            <span class="evo-condition">{{ .Condition }}</span>
+                            {{ end }}
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+                {{ if .Pokemon.Evolution.Mega }}
+                <div class="evolution-group">
+                    <h3>Méga-Évolutions</h3>
+                    <div class="evolution-list">
+                        {{ range .Pokemon.Evolution.Mega }}
+                        <a href="/pokemon/{{ .PokedexID }}" class="evolution-card mega">
+                            <span class="evo-number">N° {{ printf "%03d" .PokedexID }}</span>
+                            <span class="evo-name">{{ .Name }}</span>
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</body>
+</html>
