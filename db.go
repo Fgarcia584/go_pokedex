@@ -16,6 +16,9 @@ func initDB() {
 		log.Fatal("La variable d'environnement DATABASE_URL est requise")
 	}
 
+	// DEBUG: affiche la connection string complète (retire ça après)
+    log.Printf("CONNECTION STRING: %s", dsn)
+
 	var err error
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
