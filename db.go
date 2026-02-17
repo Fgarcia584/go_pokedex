@@ -27,7 +27,7 @@ func initDB() {
 
 	// AutoMigrate crée la table si elle n'existe pas
 	if err := db.AutoMigrate(&Note{}); err != nil {
-		log.Fatalf("Erreur lors de la migration : %v", err)
+		log.Printf("Avertissement migration : %v", err)
 	}
 
 	log.Println("Base de données connectée et migrée avec succès")
