@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	tyradexAPI = "https://tyradex.vercel.app/api/v1/pokemon"
+	tyradexAPI = "https://tyradex.app/api/v1/pokemon"
 	port       = ":8080"
 )
 
