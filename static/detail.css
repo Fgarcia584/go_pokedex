@@ -452,3 +452,148 @@
         font-size: 0.9rem;
     }
 }
+
+/* ========== NOTES / COMMENTAIRES ========== */
+.notes-section {
+    background: #2a2a2a;
+    border: 2px solid #444;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.notes-section h2 {
+    color: #3db57a;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #3db57a;
+    padding-bottom: 0.5rem;
+}
+
+.note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.note-form textarea {
+    background: #1a1a1a;
+    border: 2px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.note-form textarea:focus {
+    outline: none;
+    border-color: #3db57a;
+}
+
+.notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.note-card {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.note-content {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin-bottom: 0.75rem;
+}
+
+.note-edit-form textarea {
+    width: 100%;
+    background: #2a2a2a;
+    border: 2px solid #3db57a;
+    border-radius: 6px;
+    color: #fff;
+    padding: 0.6rem;
+    font-size: 0.95rem;
+    resize: vertical;
+    min-height: 70px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.note-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.note-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.note-btn {
+    padding: 0.3rem 0.75rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+.note-btn:hover {
+    opacity: 0.85;
+}
+
+.note-btn-add {
+    background: #3db57a;
+    color: #fff;
+    align-self: flex-end;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.95rem;
+}
+
+.note-btn-edit {
+    background: #4a90d9;
+    color: #fff;
+}
+
+.note-btn-delete {
+    background: #c0392b;
+    color: #fff;
+}
+
+.note-btn-save {
+    background: #3db57a;
+    color: #fff;
+}
+
+.note-btn-cancel {
+    background: #555;
+    color: #fff;
+}
+
+.notes-empty {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 1.5rem 0;
+}

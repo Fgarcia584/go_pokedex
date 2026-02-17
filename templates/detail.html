@@ -208,7 +208,70 @@
                 {{ end }}
             </div>
             {{ end }}
+
+            <!-- Notes / Commentaires -->
+            <div class="notes-section">
+                <h2>Notes & Commentaires</h2>
+
+                <!-- Formulaire d'ajout -->
+                <form class="note-form" method="POST" action="/pokemon/{{ .Pokemon.PokedexID }}/notes">
+                    <textarea name="content" placeholder="Ajouter une note sur ce Pokémon..." required></textarea>
+                    <button type="submit" class="note-btn note-btn-add">Ajouter une note</button>
+                </form>
+
+                <!-- Liste des notes existantes -->
+                {{ if .Notes }}
+                <div class="notes-list">
+                    {{ range .Notes }}
+                    <div class="note-card">
+                        <div class="note-content" id="note-content-{{ .ID }}">{{ .Content }}</div>
+
+                        <!-- Formulaire d'édition (masqué par défaut) -->
+                        <form class="note-edit-form" id="note-edit-form-{{ .ID }}"
+                              method="POST" action="/pokemon/{{ $.Pokemon.PokedexID }}/notes/{{ .ID }}/edit"
+                              style="display:none;">
+                            <textarea name="content">{{ .Content }}</textarea>
+                            <div class="note-actions">
+                                <button type="submit" class="note-btn note-btn-save">Sauvegarder</button>
+                                <button type="button" class="note-btn note-btn-cancel"
+                                        onclick="cancelEdit({{ .ID }})">Annuler</button>
+                            </div>
+                        </form>
+
+                        <div class="note-meta">
+                            <span class="note-date">{{ formatDate .CreatedAt }}</span>
+                            <div class="note-actions">
+                                <button type="button" class="note-btn note-btn-edit"
+                                        onclick="startEdit({{ .ID }})">Modifier</button>
+                                <form method="POST"
+                                      action="/pokemon/{{ $.Pokemon.PokedexID }}/notes/{{ .ID }}/delete"
+                                      style="display:inline;">
+                                    <button type="submit" class="note-btn note-btn-delete"
+                                            onclick="return confirm('Supprimer cette note ?')">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+                {{ else }}
+                <p class="notes-empty">Aucune note pour ce Pokémon. Soyez le premier à en ajouter une !</p>
+                {{ end }}
+            </div>
+
         </div>
     </div>
+
+    <script>
+        function startEdit(noteId) {
+            document.getElementById('note-content-' + noteId).style.display = 'none';
+            document.getElementById('note-edit-form-' + noteId).style.display = 'block';
+        }
+
+        function cancelEdit(noteId) {
+            document.getElementById('note-edit-form-' + noteId).style.display = 'none';
+            document.getElementById('note-content-' + noteId).style.display = 'block';
+        }
+    </script>
 </body>
 </html>
