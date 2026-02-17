@@ -16,14 +16,30 @@ func initDB() {
 		log.Fatal("La variable d'environnement DATABASE_URL est requise")
 	}
 
-	// DEBUG: affiche la connection string complète (retire ça après)
-    log.Printf("CONNECTION STRING: %s", dsn)
+	
 
 	var err error
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Impossible de se connecter à la base de données : %v", err)
 	}
+
+
+	// Récupère la connexion SQL sous-jacente
+    sqlDB, err := db.DB()
+    if err != nil {
+        log.Printf("Erreur lors de la récupération de la connexion SQL : %v", err)
+    } else {
+        // Teste la connexion
+        if err := sqlDB.Ping(); err != nil {
+            log.Fatalf("Impossible de ping la base : %v", err)
+        }
+        
+        // Infos sur la connexion
+        log.Printf("✓ Connexion à la base établie")
+        log.Printf("✓ Max open connections: %d", sqlDB.Stats().MaxOpenConnections)
+        log.Printf("✓ Connexions actives: %d", sqlDB.Stats().OpenConnections)
+    }
 
 	// AutoMigrate crée la table si elle n'existe pas
 	if err := db.AutoMigrate(&Note{}); err != nil {
